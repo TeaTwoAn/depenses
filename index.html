@@ -126,7 +126,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   <div class="hd">
     <div>
       <div class="hd-title">Nouvelle<br>dépense</div>
-      <div class="hd-sub" id="hd-date"></div>
     </div>
     <div class="icon-btn" onclick="openSettings()">⚙</div>
   </div>
@@ -169,12 +168,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
           <option>Courses</option>
           <option>Chat</option>
           <option>Diane</option>
-          <option>Restaurants &amp; Livraisons</option>
+          <option>Restaurant &amp; Livraisons</option>
           <option>Ameublement</option>
           <option>Voyages</option>
           <option>Autres</option>
           <option>Perso</option>
           <option>Santé</option>
+        </select>
+        <span class="cat-arrow">▾</span>
+      </div>
+    </div>
+
+    <div>
+      <span class="field-lbl">Onglet</span>
+      <div class="cat-select-wrap">
+        <select class="cat-select" id="month-select" onchange="saveMonth(this.value)">
+          <option value="JANVIER">Janvier</option>
+          <option value="FEVRIER">Février</option>
+          <option value="MARS">Mars</option>
+          <option value="AVRIL">Avril</option>
+          <option value="MAI">Mai</option>
+          <option value="JUIN">Juin</option>
+          <option value="JUILLET">Juillet</option>
+          <option value="AOUT">Août</option>
+          <option value="SEPTEMBRE">Septembre</option>
+          <option value="OCTOBRE">Octobre</option>
+          <option value="NOVEMBRE">Novembre</option>
+          <option value="DECEMBRE">Décembre</option>
         </select>
         <span class="cat-arrow">▾</span>
       </div>
@@ -214,10 +234,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       <label>Token secret</label>
       <input type="text" id="cfg-token" placeholder="MON_TOKEN_SECRET">
     </div>
-    <div class="cfg-row">
-      <label>Onglet actuel (mois)</label>
-      <input type="text" id="cfg-tab" placeholder="mai 2026">
-    </div>
     <div class="toggle-row">
       <div>
         <div class="toggle-lbl">Notifications</div>
@@ -239,8 +255,19 @@ const getC = () => { try { return JSON.parse(localStorage.getItem(CFG)) || {}; }
 let person = null, selectedCat = null;
 
 // ── Init ──
-document.getElementById('hd-date').textContent =
-  new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+
+// Restore saved month or default to current
+(function() {
+  const saved = getC().tab;
+  const months = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE'];
+  const current = months[new Date().getMonth()];
+  document.getElementById('month-select').value = saved || current;
+})();
+
+function saveMonth(val) {
+  const cfg = getC(); cfg.tab = val;
+  localStorage.setItem(CFG, JSON.stringify(cfg));
+}
 
 // ── Person ──
 function pickPerson(p, name) {
@@ -280,6 +307,24 @@ function updateBtn() {
 }
 document.getElementById('amount').addEventListener('input', updateBtn);
 
+// ── JSONP helper — contourne le problème de redirect CORS d'Apps Script ──
+function callScript(url, params) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_cb_' + Date.now();
+    params.set('callback', cbName);
+    const script = document.createElement('script');
+    script.src = `${url}?${params.toString()}`;
+    window[cbName] = (data) => {
+      delete window[cbName];
+      document.body.removeChild(script);
+      resolve(data);
+    };
+    script.onerror = () => reject(new Error('Impossible de joindre le serveur'));
+    document.body.appendChild(script);
+    setTimeout(() => reject(new Error('Timeout')), 10000);
+  });
+}
+
 // ── Submit ──
 async function submitExpense() {
   const cfg = getC();
@@ -295,7 +340,7 @@ async function submitExpense() {
   const dd = String(today.getDate()).padStart(2,'0');
   const mm = String(today.getMonth()+1).padStart(2,'0');
   const comment = merchant ? `${dd}/${mm} - ${merchant}` : `${dd}/${mm}`;
-  const tab = cfg.tab || today.toLocaleString('fr-FR', { month:'long', year:'numeric' });
+  const tab = document.getElementById('month-select').value;
 
   try {
     if (!cfg.url) throw new Error('URL Apps Script non configurée — ouvre ⚙');
@@ -307,8 +352,7 @@ async function submitExpense() {
       category: selectedCat,
       comment, tab,
     });
-    const r = await fetch(`${cfg.url}?${params.toString()}`);
-    const data = await r.json();
+    const data = await callScript(cfg.url, params);
     if (data.error) throw new Error(data.error);
 
     if (cfg.notif !== false) {
@@ -357,17 +401,17 @@ function openSettings() {
   const c = getC();
   document.getElementById('cfg-url').value = c.url || '';
   document.getElementById('cfg-token').value = c.token || '';
-  document.getElementById('cfg-tab').value = c.tab || new Date().toLocaleString('fr-FR',{month:'long',year:'numeric'});
   document.getElementById('cfg-notif').checked = c.notif !== false;
   document.getElementById('overlay').classList.add('show');
 }
 function closeSettingsOutside(e) { if(e.target.id==='overlay') closeSettings(); }
 function closeSettings() { document.getElementById('overlay').classList.remove('show'); }
 function saveSettings() {
+  const cfg = getC();
   localStorage.setItem(CFG, JSON.stringify({
     url: document.getElementById('cfg-url').value.trim(),
     token: document.getElementById('cfg-token').value.trim(),
-    tab: document.getElementById('cfg-tab').value.trim(),
+    tab: cfg.tab,
     notif: document.getElementById('cfg-notif').checked,
   }));
   closeSettings();
