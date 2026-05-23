@@ -7,32 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #111110;
-  --s1: #1c1c1a;
-  --s2: #262624;
-  --border: #333330;
-  --text: #f0ede8;
-  --muted: #6b6860;
-  --t: #c4f060;
-  --m: #f06090;
-  --t-bg: rgba(196,240,96,0.1);
-  --m-bg: rgba(240,96,144,0.1);
+  --bg: #111110; --s1: #1c1c1a; --s2: #262624; --border: #333330;
+  --text: #f0ede8; --muted: #6b6860;
+  --t: #c4f060; --m: #f06090;
+  --t-bg: rgba(196,240,96,0.1); --m-bg: rgba(240,96,144,0.1);
   --r: 14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 
-.screen{display:none;flex-direction:column;min-height:100vh;padding-bottom:32px}
+.screen{display:none;flex-direction:column;min-height:100vh;padding-bottom:40px}
 .screen.active{display:flex}
 
 /* HEADER */
-.hd{padding:52px 22px 20px;display:flex;justify-content:space-between;align-items:flex-end}
+.hd{padding:52px 22px 24px;display:flex;justify-content:space-between;align-items:flex-end}
 .hd-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;line-height:1.1}
-.hd-sub{font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:0.04em}
 .icon-btn{width:38px;height:38px;border-radius:50%;background:var(--s1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--muted);flex-shrink:0}
 
-/* PERSON PICKER */
-.person-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px;margin-top:8px}
+/* PERSON CARDS */
+.person-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 22px}
 .person-card{border-radius:var(--r);padding:28px 20px;cursor:pointer;transition:all 0.15s;border:1.5px solid var(--border);background:var(--s1);text-align:center}
 .person-card:active{transform:scale(0.97)}
 .person-card.titouan{border-color:rgba(196,240,96,0.3)}
@@ -43,80 +36,87 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .person-name{font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:0.05em}
 
 /* AMOUNT SCREEN */
-.amount-section{padding:0 22px;flex:1;display:flex;flex-direction:column;gap:20px;margin-top:8px}
+.form-body{padding:0 22px;flex:1;display:flex;flex-direction:column;gap:16px;margin-top:4px}
 .person-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:30px;font-size:13px;font-weight:500;margin:0 22px 4px;width:fit-content}
 .person-tag.T{background:var(--t-bg);color:var(--t);border:1px solid rgba(196,240,96,0.2)}
 .person-tag.M{background:var(--m-bg);color:var(--m);border:1px solid rgba(240,96,144,0.2)}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.T .dot{background:var(--t)}
-.M .dot{background:var(--m)}
+.T .dot{background:var(--t)} .M .dot{background:var(--m)}
 
-.amount-wrap{background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);padding:22px 20px}
-.field-lbl{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block}
+.field-lbl{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block}
+.amount-wrap{background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);padding:20px 20px}
 .amt-row{display:flex;align-items:baseline;gap:8px}
 .amt-input{flex:1;background:none;border:none;outline:none;font-family:'Syne',sans-serif;font-size:48px;font-weight:600;color:var(--text);width:100%;line-height:1}
 .amt-input::placeholder{color:var(--border)}
-.amt-cur{font-family:'Syne',sans-serif;font-size:24px;font-weight:400;color:var(--muted)}
+.amt-cur{font-family:'Syne',sans-serif;font-size:24px;color:var(--muted)}
 
-/* Dropdown */
-.cat-select-wrap{position:relative}
-.cat-select{width:100%;background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 44px 15px 18px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .2s}
-.cat-select:focus{border-color:var(--muted)}
-.cat-select.sel-T{border-color:var(--t);color:var(--t);background:var(--t-bg)}
-.cat-select.sel-M{border-color:var(--m);color:var(--m);background:var(--m-bg)}
-.cat-select option{background:var(--s2);color:var(--text)}
-.cat-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:12px;color:var(--muted)}
-.spin{width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--t);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
+.select-wrap{position:relative}
+.sel{width:100%;background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 44px 15px 18px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .2s}
+.sel:focus{border-color:var(--muted)}
+.sel.sel-T{border-color:var(--t);color:var(--t);background:var(--t-bg)}
+.sel.sel-M{border-color:var(--m);color:var(--m);background:var(--m-bg)}
+.sel option{background:var(--s2);color:var(--text)}
+.sel-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:12px;color:var(--muted)}
 
 .merch-input{width:100%;background:var(--s1);border:1.5px solid var(--border);border-radius:var(--r);padding:15px 18px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;transition:border-color .2s}
 .merch-input:focus{border-color:var(--muted)}
 .merch-input::placeholder{color:var(--muted)}
 
-.submit-wrap{padding:0 22px;margin-top:auto;padding-top:20px}
-.submit-btn{width:100%;border:none;border-radius:var(--r);padding:17px;font-family:'Syne',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:0.02em}
+.submit-wrap{padding:0 22px;margin-top:auto;padding-top:16px}
+.submit-btn{width:100%;border:none;border-radius:var(--r);padding:17px;font-family:'Syne',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s}
 .submit-btn.T{background:var(--t);color:#111}
 .submit-btn.M{background:var(--m);color:#111}
 .submit-btn:disabled{opacity:0.3;cursor:not-allowed}
 .submit-btn:not(:disabled):active{transform:scale(0.98)}
+.back-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:22px;padding:4px}
 
 /* TOAST */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--s2);border:1px solid var(--border);border-radius:40px;padding:12px 20px;font-size:13px;color:var(--text);white-space:nowrap;z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 40px)}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.toast-check{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.toast-off{margin-left:auto;font-size:11px;color:var(--muted);cursor:pointer;padding-left:8px;border-left:1px solid var(--border);white-space:nowrap}
+.toast-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.toast-off{margin-left:auto;font-size:11px;color:var(--muted);cursor:pointer;padding-left:10px;border-left:1px solid var(--border)}
 
-/* SETTINGS DRAWER */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+/* SETTINGS OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
 .overlay.show{opacity:1;pointer-events:all}
-.drawer{position:absolute;bottom:0;left:0;right:0;background:var(--s1);border-radius:22px 22px 0 0;padding:24px 22px 48px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.1,.64,1);max-height:90vh;overflow-y:auto}
+.drawer{position:absolute;bottom:0;left:0;right:0;background:var(--s1);border-radius:22px 22px 0 0;padding:24px 22px 48px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.1,.64,1);max-height:92vh;overflow-y:auto}
 .overlay.show .drawer{transform:translateY(0)}
 .drawer-handle{width:32px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 22px}
-.drawer-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:600;margin-bottom:6px}
-.drawer-sub{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.drawer-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:600;margin-bottom:4px}
+.drawer-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.5}
+
+/* Config URL row */
 .cfg-row{margin-bottom:14px}
 .cfg-row label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:6px}
 .cfg-row input{width:100%;background:var(--s2);border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
 .cfg-row input:focus{border-color:var(--muted)}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--border);margin-top:4px}
+
+/* Mapping table */
+.map-title{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:20px 0 10px}
+.map-row{display:grid;grid-template-columns:1fr 80px 80px;gap:8px;align-items:center;margin-bottom:8px}
+.map-row-header{display:grid;grid-template-columns:1fr 80px 80px;gap:8px;margin-bottom:6px}
+.map-row-header span{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.map-row-header span:nth-child(2){text-align:center;color:var(--t)}
+.map-row-header span:nth-child(3){text-align:center;color:var(--m)}
+.cat-label{font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell-input{background:var(--s2);border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:13px;color:var(--text);outline:none;text-align:center;width:100%;text-transform:uppercase}
+.cell-input:focus{border-color:var(--muted)}
+.cell-input::placeholder{color:var(--border)}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--border);margin-top:8px}
 .toggle-lbl{font-size:14px}
 .toggle-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .toggle{position:relative;width:44px;height:26px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0}
 .toggle-slider{position:absolute;inset:0;background:var(--s2);border-radius:13px;cursor:pointer;transition:.2s;border:1px solid var(--border)}
 .toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--muted);border-radius:50%;transition:.2s}
-.toggle input:checked + .toggle-slider{background:var(--t-bg);border-color:var(--t)}
-.toggle input:checked + .toggle-slider:before{transform:translateX(18px);background:var(--t)}
-.save-btn{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:12px;padding:15px;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px}
-.back-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:22px;line-height:1;padding:4px}
+.toggle input:checked+.toggle-slider{background:var(--t-bg);border-color:var(--t)}
+.toggle input:checked+.toggle-slider:before{transform:translateX(18px);background:var(--t)}
+.save-btn{width:100%;background:var(--text);color:var(--bg);border:none;border-radius:12px;padding:15px;font-family:'Syne',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:16px}
 
-/* Setup screen */
-.setup-body{padding:0 22px;flex:1;display:flex;flex-direction:column;gap:16px;margin-top:8px}
-.setup-step{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px}
-.step-num{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.step-title{font-size:14px;font-weight:500;margin-bottom:4px}
-.step-desc{font-size:13px;color:var(--muted);line-height:1.6}
-.step-desc code{font-size:12px;background:var(--s2);padding:1px 6px;border-radius:4px;color:var(--text)}
+.spin{width:14px;height:14px;border:2px solid rgba(0,0,0,0.2);border-top-color:#111;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -124,9 +124,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 <!-- ── SCREEN 1 : Qui ? ── -->
 <div class="screen active" id="s-person">
   <div class="hd">
-    <div>
-      <div class="hd-title">Nouvelle<br>dépense</div>
-    </div>
+    <div><div class="hd-title">Nouvelle<br>dépense</div></div>
     <div class="icon-btn" onclick="openSettings()">⚙</div>
   </div>
   <div class="person-grid">
@@ -141,16 +139,14 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   </div>
 </div>
 
-<!-- ── SCREEN 2 : Montant + Catégorie + Marchand ── -->
+<!-- ── SCREEN 2 : Saisie ── -->
 <div class="screen" id="s-amount">
   <div class="hd">
     <div><div class="hd-title">Détails</div></div>
     <button class="back-btn" onclick="goBack()">←</button>
   </div>
-  <div class="person-tag" id="person-tag">
-    <span class="dot"></span><span id="person-label"></span>
-  </div>
-  <div class="amount-section">
+  <div class="person-tag" id="person-tag"><span class="dot"></span><span id="person-label"></span></div>
+  <div class="form-body">
 
     <div class="amount-wrap">
       <span class="field-lbl">Montant</span>
@@ -162,27 +158,18 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
     <div>
       <span class="field-lbl">Catégorie</span>
-      <div class="cat-select-wrap">
-        <select class="cat-select" id="cat-select" onchange="selCat(this.value)">
+      <div class="select-wrap">
+        <select class="sel" id="cat-select" onchange="selCat(this.value)">
           <option value="">— Choisir —</option>
-          <option>Courses</option>
-          <option>Chat</option>
-          <option>Diane</option>
-          <option>Restaurant &amp; Livraisons</option>
-          <option>Ameublement</option>
-          <option>Voyages</option>
-          <option>Autres</option>
-          <option>Perso</option>
-          <option>Santé</option>
         </select>
-        <span class="cat-arrow">▾</span>
+        <span class="sel-arrow">▾</span>
       </div>
     </div>
 
     <div>
       <span class="field-lbl">Onglet</span>
-      <div class="cat-select-wrap">
-        <select class="cat-select" id="month-select" onchange="saveMonth(this.value)">
+      <div class="select-wrap">
+        <select class="sel" id="month-select" onchange="saveMonth(this.value)">
           <option value="JANVIER">Janvier</option>
           <option value="FEVRIER">Février</option>
           <option value="MARS">Mars</option>
@@ -196,7 +183,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
           <option value="NOVEMBRE">Novembre</option>
           <option value="DECEMBRE">Décembre</option>
         </select>
-        <span class="cat-arrow">▾</span>
+        <span class="sel-arrow">▾</span>
       </div>
     </div>
 
@@ -207,25 +194,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
   </div>
   <div class="submit-wrap">
-    <button class="submit-btn T" id="submit-btn" disabled onclick="submitExpense()">
-      Ajouter
-    </button>
+    <button class="submit-btn T" id="submit-btn" disabled onclick="submitExpense()">Ajouter</button>
   </div>
 </div>
 
 <!-- Toast -->
 <div class="toast" id="toast">
-  <span class="toast-check" id="toast-check">✓</span>
+  <span class="toast-icon" id="toast-icon">✓</span>
   <span id="toast-msg"></span>
   <span class="toast-off" onclick="disableNotifs()">Désactiver</span>
 </div>
 
-<!-- Settings drawer -->
+<!-- Settings -->
 <div class="overlay" id="overlay" onclick="closeSettingsOutside(event)">
   <div class="drawer">
     <div class="drawer-handle"></div>
     <div class="drawer-title">Configuration</div>
-    <div class="drawer-sub">Colle ici l'URL de ton Apps Script déployé.</div>
+    <div class="drawer-sub">Définis la cellule de départ de chaque catégorie dans ton Sheet. Le script descend jusqu'à la première ligne vide.</div>
+
     <div class="cfg-row">
       <label>URL Apps Script</label>
       <input type="url" id="cfg-url" placeholder="https://script.google.com/macros/s/…/exec">
@@ -234,6 +220,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       <label>Token secret</label>
       <input type="text" id="cfg-token" placeholder="MON_TOKEN_SECRET">
     </div>
+
+    <div class="map-title">Cellules de départ par catégorie</div>
+    <div class="map-row-header">
+      <span>Catégorie</span>
+      <span>Titouan</span>
+      <span>Morrigane</span>
+    </div>
+    <div id="mapping-rows"></div>
+
     <div class="toggle-row">
       <div>
         <div class="toggle-lbl">Notifications</div>
@@ -249,37 +244,34 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 </div>
 
 <script>
-const CFG = 'depenses_v5';
+const CFG = 'depenses_v6';
+const CATS = ['Courses','Chat','Diane','Restaurant & Livraisons','Ameublement','Voyages','Autres','Perso','Santé'];
+const MONTHS = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE'];
+
 const getC = () => { try { return JSON.parse(localStorage.getItem(CFG)) || {}; } catch { return {}; } };
 
 let person = null, selectedCat = null;
 
 // ── Init ──
-
-// Restore saved month or default to current
-(function() {
+(function(){
+  // Populate cat select
+  const sel = document.getElementById('cat-select');
+  CATS.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+  // Set current month
   const saved = getC().tab;
-  const months = ['JANVIER','FEVRIER','MARS','AVRIL','MAI','JUIN','JUILLET','AOUT','SEPTEMBRE','OCTOBRE','NOVEMBRE','DECEMBRE'];
-  const current = months[new Date().getMonth()];
-  document.getElementById('month-select').value = saved || current;
+  const currentMonth = MONTHS[new Date().getMonth()];
+  document.getElementById('month-select').value = saved || currentMonth;
 })();
-
-function saveMonth(val) {
-  const cfg = getC(); cfg.tab = val;
-  localStorage.setItem(CFG, JSON.stringify(cfg));
-}
 
 // ── Person ──
 function pickPerson(p, name) {
   person = p;
-  const tag = document.getElementById('person-tag');
-  tag.className = 'person-tag ' + p;
+  document.getElementById('person-tag').className = 'person-tag ' + p;
   document.getElementById('person-label').textContent = name;
-  const btn = document.getElementById('submit-btn');
-  btn.className = 'submit-btn ' + p;
+  document.getElementById('submit-btn').className = 'submit-btn ' + p;
   selectedCat = null;
   document.getElementById('cat-select').value = '';
-  document.getElementById('cat-select').className = 'cat-select';
+  document.getElementById('cat-select').className = 'sel';
   document.getElementById('amount').value = '';
   document.getElementById('merchant').value = '';
   showScreen('s-amount');
@@ -296,41 +288,53 @@ function showScreen(id) {
 // ── Category ──
 function selCat(v) {
   selectedCat = v || null;
-  const sel = document.getElementById('cat-select');
-  sel.className = 'cat-select' + (selectedCat ? ' sel-' + person : '');
+  document.getElementById('cat-select').className = 'sel' + (selectedCat ? ' sel-' + person : '');
   updateBtn();
 }
 
 function updateBtn() {
-  document.getElementById('submit-btn').disabled =
-    !document.getElementById('amount').value || !selectedCat;
+  document.getElementById('submit-btn').disabled = !document.getElementById('amount').value || !selectedCat;
 }
 document.getElementById('amount').addEventListener('input', updateBtn);
 
-// ── JSONP helper — contourne le problème de redirect CORS d'Apps Script ──
-function callScript(url, params) {
-  return new Promise((resolve, reject) => {
-    const cbName = '_cb_' + Date.now();
-    params.set('callback', cbName);
-    const script = document.createElement('script');
-    script.src = `${url}?${params.toString()}`;
-    window[cbName] = (data) => {
-      delete window[cbName];
-      document.body.removeChild(script);
-      resolve(data);
-    };
-    script.onerror = () => reject(new Error('Impossible de joindre le serveur'));
-    document.body.appendChild(script);
-    setTimeout(() => reject(new Error('Timeout')), 10000);
-  });
+// ── Month ──
+function saveMonth(val) {
+  const cfg = getC(); cfg.tab = val;
+  localStorage.setItem(CFG, JSON.stringify(cfg));
 }
 
 // ── Submit ──
+function callScript(url, params) {
+  return new Promise((resolve, reject) => {
+    const cb = '_cb_' + Date.now();
+    params.set('callback', cb);
+    const s = document.createElement('script');
+    s.src = url + '?' + params.toString();
+    const timer = setTimeout(() => { cleanup(); reject(new Error('Timeout — vérifie l\'URL Apps Script')); }, 10000);
+    window[cb] = (data) => { cleanup(); resolve(data); };
+    s.onerror = () => { cleanup(); reject(new Error('Impossible de joindre le serveur')); };
+    function cleanup() { clearTimeout(timer); delete window[cb]; if (s.parentNode) document.body.removeChild(s); }
+    document.body.appendChild(s);
+  });
+}
+
 async function submitExpense() {
   const cfg = getC();
   const amount = parseFloat(document.getElementById('amount').value);
   const merchant = document.getElementById('merchant').value.trim();
+  const tab = document.getElementById('month-select').value;
   if (!amount || !selectedCat) return;
+
+  if (!cfg.url) { showToast('URL Apps Script non configurée — ouvre ⚙', 'err'); return; }
+
+  // Récupère la cellule de départ depuis le mapping
+  const mapping = cfg.mapping || {};
+  const catKey = selectedCat;
+  const startCell = person === 'T' ? mapping[catKey + '_T'] : mapping[catKey + '_M'];
+  if (!startCell) {
+    showToast('Cellule non définie pour "' + selectedCat + '" — ouvre ⚙', 'err');
+    return;
+  }
 
   const btn = document.getElementById('submit-btn');
   btn.innerHTML = '<span class="spin"></span>';
@@ -339,36 +343,23 @@ async function submitExpense() {
   const today = new Date();
   const dd = String(today.getDate()).padStart(2,'0');
   const mm = String(today.getMonth()+1).padStart(2,'0');
-  const comment = merchant ? `${dd}/${mm} - ${merchant}` : `${dd}/${mm}`;
-  const tab = document.getElementById('month-select').value;
+  const comment = merchant ? dd+'/'+mm+' - '+merchant : dd+'/'+mm;
 
   try {
-    if (!cfg.url) throw new Error('URL Apps Script non configurée — ouvre ⚙');
-
-    const params = new URLSearchParams({
-      token: cfg.token || '',
-      action: 'addExpense',
-      amount, person,
-      category: selectedCat,
-      comment, tab,
-    });
+    const params = new URLSearchParams({ token: cfg.token||'', action:'addExpense', amount, startCell, tab, comment });
     const data = await callScript(cfg.url, params);
     if (data.error) throw new Error(data.error);
 
-    if (cfg.notif !== false) {
-      showToast(`${amount.toFixed(2)} € · ${selectedCat}`, person);
-    }
+    if (cfg.notif !== false) showToast(amount.toFixed(2)+'€ · '+selectedCat, person);
 
-    // Reset pour prochaine saisie
     document.getElementById('amount').value = '';
     document.getElementById('merchant').value = '';
     selectedCat = null;
     document.getElementById('cat-select').value = '';
-    document.getElementById('cat-select').className = 'cat-select';
+    document.getElementById('cat-select').className = 'sel';
     btn.textContent = 'Ajouter';
     updateBtn();
     document.getElementById('amount').focus();
-
   } catch(e) {
     showToast(e.message, 'err');
     btn.textContent = 'Ajouter';
@@ -380,41 +371,61 @@ async function submitExpense() {
 let toastTimer;
 function showToast(msg, type) {
   const t = document.getElementById('toast');
-  const c = document.getElementById('toast-check');
+  const ic = document.getElementById('toast-icon');
   document.getElementById('toast-msg').textContent = msg;
-  c.style.background = type==='T' ? 'var(--t-bg)' : type==='M' ? 'var(--m-bg)' : 'rgba(192,57,43,0.15)';
-  c.style.color = type==='T' ? 'var(--t)' : type==='M' ? 'var(--m)' : '#e74c3c';
-  c.textContent = type==='err' ? '✕' : '✓';
+  ic.style.background = type==='T'?'var(--t-bg)':type==='M'?'var(--m-bg)':'rgba(192,57,43,0.15)';
+  ic.style.color = type==='T'?'var(--t)':type==='M'?'var(--m)':'#e74c3c';
+  ic.textContent = type==='err'?'✕':'✓';
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3500);
 }
 function disableNotifs() {
-  const cfg = getC(); cfg.notif = false;
-  localStorage.setItem(CFG, JSON.stringify(cfg));
+  const cfg=getC(); cfg.notif=false; localStorage.setItem(CFG,JSON.stringify(cfg));
   document.getElementById('toast').classList.remove('show');
-  document.getElementById('cfg-notif').checked = false;
+  document.getElementById('cfg-notif').checked=false;
 }
 
 // ── Settings ──
 function openSettings() {
   const c = getC();
-  document.getElementById('cfg-url').value = c.url || '';
-  document.getElementById('cfg-token').value = c.token || '';
-  document.getElementById('cfg-notif').checked = c.notif !== false;
+  document.getElementById('cfg-url').value = c.url||'';
+  document.getElementById('cfg-token').value = c.token||'';
+  document.getElementById('cfg-notif').checked = c.notif!==false;
+
+  // Render mapping rows
+  const mapping = c.mapping || {};
+  const container = document.getElementById('mapping-rows');
+  container.innerHTML = CATS.map(cat => `
+    <div class="map-row">
+      <span class="cat-label" title="${cat}">${cat}</span>
+      <input class="cell-input" id="map_${cat}_T" placeholder="B27" value="${mapping[cat+'_T']||''}">
+      <input class="cell-input" id="map_${cat}_M" placeholder="C27" value="${mapping[cat+'_M']||''}">
+    </div>
+  `).join('');
+
   document.getElementById('overlay').classList.add('show');
 }
-function closeSettingsOutside(e) { if(e.target.id==='overlay') closeSettings(); }
-function closeSettings() { document.getElementById('overlay').classList.remove('show'); }
+
+function closeSettingsOutside(e) { if(e.target.id==='overlay') document.getElementById('overlay').classList.remove('show'); }
+
 function saveSettings() {
+  const mapping = {};
+  CATS.forEach(cat => {
+    const t = document.getElementById('map_'+cat+'_T').value.trim().toUpperCase();
+    const m = document.getElementById('map_'+cat+'_M').value.trim().toUpperCase();
+    if (t) mapping[cat+'_T'] = t;
+    if (m) mapping[cat+'_M'] = m;
+  });
   const cfg = getC();
   localStorage.setItem(CFG, JSON.stringify({
     url: document.getElementById('cfg-url').value.trim(),
     token: document.getElementById('cfg-token').value.trim(),
-    tab: cfg.tab,
+    tab: cfg.tab || MONTHS[new Date().getMonth()],
     notif: document.getElementById('cfg-notif').checked,
+    mapping,
   }));
-  closeSettings();
+  document.getElementById('overlay').classList.remove('show');
   showToast('Sauvegardé ✓', 'T');
 }
 </script>
